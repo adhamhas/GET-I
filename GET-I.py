@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 import os
-#os.system('sudo pip install builtwith --upgrade')
+os.system('sudo pip install builtwith --upgrade')
 
-#os.system('sudo pip install python-whois --upgrade')
-#os.system('sudo pip install http.client')
+os.system('sudo pip install python-whois --upgrade')
+os.system('sudo pip install http.client')
+os.system('pip install colorama')
 os.system('clear')
-#os.system('pip install colorama')
-#os.system("pip3 install DateTime")
 import builtwith
 import whois 
 import requests 
@@ -29,12 +28,14 @@ num = int(input("choose what you need : "))
 
 #######################################################
 if num == 1 :
+   os.system('clear')
    ips=input("url: ")
    ip = socket.gethostbyname_ex(ips)
    print(ip)
 
 ########################################################
 elif num == 2 :
+   os.system('clear')
    url = input("url: ")
    built= builtwith.parse(url)
    info = whois.whois(url)
@@ -43,8 +44,8 @@ elif num == 2 :
 
 ########################################################
 elif num == 3:  
+   os.system('clear')
   h= http.client.HTTPConnection(input("url: "))
-
   h.request("GET", "/")
 
   data= h.getresponse()
@@ -52,6 +53,7 @@ elif num == 3:
 
 ########################################################
 elif num == 4 :
+   os.system('clear')
     remoteServer    = input("Enter a remote host to scan: ")
     remoteServerIP  = socket.gethostbyname(remoteServer)
 
