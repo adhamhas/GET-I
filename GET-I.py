@@ -1,11 +1,15 @@
 #!/usr/bin/python3
+#@coptright adham hasan 
 import os
-os.system('sudo pip install builtwith --upgrade')
+#os.system('sudo pip install builtwith --upgrade')
 
-os.system('sudo pip install python-whois --upgrade')
-os.system('sudo pip install http.client')
-os.system('pip install colorama')
+#os.system('sudo pip install python-whois --upgrade')
+#os.system('sudo pip install http.client')
 os.system('clear')
+#os.system('pip install colorama')
+#os.system("pip3 install DateTime")
+#os.system("pip3 install bs4")
+from bs4 import BeautifulSoup 
 import builtwith
 import whois 
 import requests 
@@ -15,6 +19,7 @@ from colorama import Fore
 import sys
 import datetime
 import subprocess
+import re 
 ########################################################
 print('''\
    ░██████╗░███████╗████████╗    ██╗ 
@@ -23,29 +28,27 @@ print('''\
    ██║░░╚██╗██╔══╝░░░░░██║░░░    ██║
    ╚██████╔╝███████╗░░░██║░░░    ██║
    ░╚═════╝░╚══════╝░░░╚═╝░░░    ╚═╝''')
-print (" 1) Website Ip \n 2) Website Id \n 3) Website Headers \n 4) Scan Ports ")
+print (" 1) Website Ip \n 2) Website Id \n 3) Website Headers \n 4) Scan Ports \n 5) Website HTML \n 6) emails ")
 num = int(input("choose what you need : "))
 
 #######################################################
 if num == 1 :
-   os.system('clear')
-   ips=input("url: ")
+   ips=input("url:- http://")
    ip = socket.gethostbyname_ex(ips)
    print(ip)
 
 ########################################################
 elif num == 2 :
-   os.system('clear')
-   url = input("url: ")
-   built= builtwith.parse(url)
-   info = whois.whois(url)
-   print(built)
-   print(info)
+   domain = input("domain: ")
+   built= builtwith.parse(domain)
+   info = whois.whois(domain)
+   print (built)
+   print (info)
 
 ########################################################
 elif num == 3:  
-   os.system('clear')
   h= http.client.HTTPConnection(input("url: "))
+
   h.request("GET", "/")
 
   data= h.getresponse()
@@ -53,7 +56,6 @@ elif num == 3:
 
 ########################################################
 elif num == 4 :
-   os.system('clear')
     remoteServer    = input("Enter a remote host to scan: ")
     remoteServerIP  = socket.gethostbyname(remoteServer)
 
@@ -81,4 +83,24 @@ elif num == 4 :
         print ("Couldn't connect to server")
         sys.exit()
 
-    print ('Scanning Completed ')    
+    print ('Scanning Completed ')
+elif num == 5 :
+    urlh=input('Enter url :')
+    req=requests.get(urlh).text
+    soup=BeautifulSoup(req, 'html.parser')
+    print(soup)
+    t=input("Enter Tag Name :")
+    for x in range(1,10):
+     find=soup.find(t)
+     print(find)
+elif num == 6: 
+    UrlMail=input('Enter url :')
+    r=requests.get(UrlMail).text
+    s=BeautifulSoup(r, 'html.parser')
+    with open('mail.txt', 'w') as a:
+      a.write(s)
+    
+reg =re.search("\S{1,}\@\S{1,}", s)
+print reg.group()
+print reg.span()
+ 
