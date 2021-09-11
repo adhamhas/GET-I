@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 #@coptright adham hasan 
 import os
-os.system('sudo pip install builtwith --upgrade')
-os.system('sudo pip install python-whois --upgrade')
-os.system('sudo pip install http.client')
-os.system('pip install colorama')
+os.system('sudo pip3 install builtwith --upgrade')
+os.system('sudo pip3 install python-whois --upgrade')
+os.system('sudo pip3 install http.client')
+os.system('pip3 install colorama')
 os.system("pip3 install DateTime")
-os.system("pip3 install bs4")
+os.system("pip3 install bs4 ")
 os.system('clear')
 from bs4 import BeautifulSoup 
 import builtwith
