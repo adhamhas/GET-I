@@ -100,6 +100,6 @@ elif num == 6:
       a.write(s)
     
 reg =re.search("\S{1,}\@\S{1,}", s)
-print reg.group()
-print reg.span()
+print (reg.group())
+print (reg.span())
  
