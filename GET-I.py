@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 #@coptright adham hasan 
 import os
-os.system('sudo pip3 install builtwith --upgrade')
-os.system('sudo pip3 install python-whois --upgrade')
+os.system('sudo pip install builtwith --upgrade')
+os.system('sudo pip install python-whois --upgrade')
 os.system('sudo pip3 install http.client')
+os.system('clear')
 os.system('pip3 install colorama')
 os.system("pip3 install DateTime")
-os.system("pip3 install bs4 ")
+os.system("pip3 install bs4")
 os.system('clear')
 from bs4 import BeautifulSoup 
 import builtwith
@@ -27,7 +28,7 @@ print('''\
    ██║░░╚██╗██╔══╝░░░░░██║░░░    ██║
    ╚██████╔╝███████╗░░░██║░░░    ██║
    ░╚═════╝░╚══════╝░░░╚═╝░░░    ╚═╝''')
-print (" 1) Website Ip \n 2) Website Id \n 3) Website Headers \n 4) Scan Ports \n 5) Website HTML \n 6) emails ")
+print (" 1) Website Ip \n 2) Website Id \n 3) Website Headers \n 4) Scan Ports \n 5) Website HTML \n 6) Website emails \n 7) Website Phones")
 num = int(input("choose what you need : "))
 
 #######################################################
@@ -46,7 +47,7 @@ elif num == 2 :
 
 ########################################################
 elif num == 3:  
-  h= http.client.HTTPConnection(input("url: "))
+  h= http.client.HTTPConnection(input("url:http:// "))
 
   h.request("GET", "/")
 
@@ -89,17 +90,32 @@ elif num == 5 :
     soup=BeautifulSoup(req, 'html.parser')
     print(soup)
     t=input("Enter Tag Name :")
-    for x in range(1,10):
-     find=soup.find(t)
-     print(find)
+    find=soup.find(t)
+    print(find)
+##############################################
 elif num == 6: 
     UrlMail=input('Enter url :')
     r=requests.get(UrlMail).text
-    s=BeautifulSoup(r, 'html.parser')
+    s=BeautifulSoup(r, 'html.parser').text
     with open('mail.txt', 'w') as a:
       a.write(s)
+      
     
-reg =re.search("\S{1,}\@\S{1,}", s)
-print (reg.group())
-print (reg.span())
- 
+    reg =re.findall("\S{1,}\@\S{1,}", s)
+    print (reg)
+################################################
+elif num ==7 :
+    UrlMobile=input('Enter url :')
+    rm=requests.get(UrlMobile).text
+    sm=BeautifulSoup(rm, 'html.parser').text
+    with open('mobile.txt', 'w') as b:
+      b.write(sm)
+   
+    
+    reg =re.findall("^(\d{10})$", sm)
+    print (reg)
+################################################
+#elif num == 8 :
+
+
+    
