@@ -1,121 +1,143 @@
 #!/usr/bin/python3
-#@coptright adham hasan 
+# @copyright adhamhas
+
 import os
-os.system('sudo pip install builtwith --upgrade')
-os.system('sudo pip install python-whois --upgrade')
-os.system('sudo pip3 install http.client')
-os.system('clear')
-os.system('pip3 install colorama')
-os.system("pip3 install DateTime")
-os.system("pip3 install bs4")
-os.system('clear')
-from bs4 import BeautifulSoup 
-import builtwith
-import whois 
-import requests 
-import http.client
-import socket 
-from colorama import Fore
 import sys
-import datetime
+import socket
+import requests
+import http.client
 import subprocess
-import re 
-########################################################
-print('''\
+import re
+import datetime
+from bs4 import BeautifulSoup
+import builtwith
+import whois
+from colorama import Fore, Style
+
+# Initial setup
+os.system('clear')
+print(Fore.GREEN + '''
    ░██████╗░███████╗████████╗    ██╗ 
    ██╔════╝░██╔════╝╚══██╔══╝    ██║ 
    ██║░░██╗░█████╗░░░░░██║░░░    ██║
    ██║░░╚██╗██╔══╝░░░░░██║░░░    ██║
    ╚██████╔╝███████╗░░░██║░░░    ██║
-   ░╚═════╝░╚══════╝░░░╚═╝░░░    ╚═╝''')
-print (" 1) Website Ip \n 2) Website Id \n 3) Website Headers \n 4) Scan Ports \n 5) Website HTML \n 6) Website emails \n 7) Website Phones")
-num = int(input("choose what you need : "))
+   ░╚═════╝░╚══════╝░░░╚═╝░░░    ╚═╝
+''' + Style.RESET_ALL)
 
-#######################################################
-if num == 1 :
-   ips=input("url:- http://")
-   ip = socket.gethostbyname_ex(ips)
-   print(ip)
+print(Fore.CYAN + '''
+1) Website IP
+2) Website Technologies & Whois Info
+3) Website Headers
+4) Port Scanner
+5) Website HTML and Tag Search
+6) Extract Emails from Website
+7) Extract Phone Numbers from Website
+''' + Style.RESET_ALL)
 
-########################################################
-elif num == 2 :
-   domain = input("domain: ")
-   built= builtwith.parse(domain)
-   info = whois.whois(domain)
-   print (built)
-   print (info)
-
-########################################################
-elif num == 3:  
-  h= http.client.HTTPConnection(input("url:http:// "))
-
-  h.request("GET", "/")
-
-  data= h.getresponse()
-  print(data.headers)
+try:
+    num = int(input(Fore.YELLOW + "Choose what you need: " + Style.RESET_ALL))
+except:
+    print("Invalid number.")
+    sys.exit(1)
 
 ########################################################
-elif num == 4 :
-    remoteServer    = input("Enter a remote host to scan: ")
-    remoteServerIP  = socket.gethostbyname(remoteServer)
-
-    print ("-" * 60)
-    print ("Please wait, scanning remote host", remoteServerIP)
-    print ("-" * 60)
-
+if num == 1:
+    target = input("Enter domain (without http://): ")
     try:
-        for port in range(1,10025):  
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            result = sock.connect_ex((remoteServerIP, port))
-            if result == 0:
-                print ("Port {}: 	 Open".format(port))
-            sock.close()
+        ip = socket.gethostbyname_ex(target)
+        print("IP Addresses:", ip)
+    except Exception as e:
+        print("Error:", e)
 
-    except KeyboardInterrupt:
-        print ("You pressed Ctrl+C")
-        sys.exit()
+########################################################
+elif num == 2:
+    domain = input("Enter domain (without http://): ")
+    try:
+        built = builtwith.parse(domain)
+        info = whois.whois(domain)
+        print(Fore.GREEN + "\nTechnologies:" + Style.RESET_ALL, built)
+        print(Fore.GREEN + "\nWhois Info:" + Style.RESET_ALL)
+        print(info)
+    except Exception as e:
+        print("Error:", e)
 
+########################################################
+elif num == 3:
+    host = input("Enter domain (without http://): ")
+    try:
+        conn = http.client.HTTPConnection(host)
+        conn.request("GET", "/")
+        res = conn.getresponse()
+        print(Fore.GREEN + "\nHeaders:" + Style.RESET_ALL)
+        print(res.headers)
+    except Exception as e:
+        print("Error:", e)
+
+########################################################
+elif num == 4:
+    remote_host = input("Enter a host to scan: ")
+    try:
+        remote_ip = socket.gethostbyname(remote_host)
     except socket.gaierror:
-        print ('Hostname could not be resolved. Exiting')
+        print("Hostname could not be resolved.")
         sys.exit()
 
-    except socket.error:
-        print ("Couldn't connect to server")
-        sys.exit()
+    print(f"Scanning {remote_ip}... (may take time)")
+    try:
+        for port in range(1, 10025):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(0.5)
+            result = sock.connect_ex((remote_ip, port))
+            if result == 0:
+                print(f"Port {port}: Open")
+            sock.close()
+    except KeyboardInterrupt:
+        print("Stopped by user.")
+    except Exception as e:
+        print("Error:", e)
+    finally:
+        print("Scan complete.")
 
-    print ('Scanning Completed ')
-elif num == 5 :
-    urlh=input('Enter url :')
-    req=requests.get(urlh).text
-    soup=BeautifulSoup(req, 'html.parser')
-    print(soup)
-    t=input("Enter Tag Name :")
-    find=soup.find(t)
-    print(find)
-##############################################
-elif num == 6: 
-    UrlMail=input('Enter url :')
-    r=requests.get(UrlMail).text
-    s=BeautifulSoup(r, 'html.parser').text
-    with open('mail.txt', 'w') as a:
-      a.write(s)
-      
-    
-    reg =re.findall("\S{1,}\@\S{1,}", s)
-    print (reg)
-################################################
-elif num ==7 :
-    UrlMobile=input('Enter url :')
-    rm=requests.get(UrlMobile).text
-    sm=BeautifulSoup(rm, 'html.parser').text
-    with open('mobile.txt', 'w') as b:
-      b.write(sm)
-   
-    
-    reg =re.findall("^(\d{10})$", sm)
-    print (reg)
-################################################
-#elif num == 8 :
+########################################################
+elif num == 5:
+    url = input("Enter full URL (e.g., http://example.com): ")
+    try:
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, 'html.parser')
+        print(soup.prettify())
+        tag = input("Enter tag name to search (e.g., h1, title): ")
+        found = soup.find(tag)
+        print(Fore.GREEN + f"\nFirst <{tag}> found:" + Style.RESET_ALL, found)
+    except Exception as e:
+        print("Error:", e)
 
+########################################################
+elif num == 6:
+    url = input("Enter full URL (e.g., http://example.com): ")
+    try:
+        page_text = BeautifulSoup(requests.get(url).text, 'html.parser').text
+        emails = re.findall(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", page_text)
+        if emails:
+            print(Fore.GREEN + "Found emails:" + Style.RESET_ALL, emails)
+        else:
+            print("No emails found.")
+    except Exception as e:
+        print("Error:", e)
 
-    
+########################################################
+elif num == 7:
+    url = input("Enter full URL (e.g., http://example.com): ")
+    try:
+        page_text = BeautifulSoup(requests.get(url).text, 'html.parser').text
+        # Simple phone number patterns (local and international)
+        phones = re.findall(r"(?:\+\d{1,3}\s?)?\(?\d{2,4}\)?[\s.-]?\d{3,4}[\s.-]?\d{3,4}", page_text)
+        if phones:
+            print(Fore.GREEN + "Found phone numbers:" + Style.RESET_ALL, phones)
+        else:
+            print("No phone numbers found.")
+    except Exception as e:
+        print("Error:", e)
+
+else:
+    print("Invalid option selected.")
